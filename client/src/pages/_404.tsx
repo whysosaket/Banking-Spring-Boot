@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
 import Image from "../assets/_404.svg";
+import { motion } from "framer-motion";
 
 const _404 = () => {
   return (
     <>
-      <div className="flex flex-col justify-center">
+      <motion.div 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, type: "spring", stiffness: 20 }}
+      className="flex flex-col justify-center">
         <center className="mx-auto mt-20">
             <img
                 className="w-72 h-72"
@@ -29,7 +34,7 @@ const _404 = () => {
         </center>
         </center>
        
-      </div>
+      </motion.div>
     </>
   );
 };

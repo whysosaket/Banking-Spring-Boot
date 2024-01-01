@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Image from "../assets/bg.svg";
 import { motion, Variants } from "framer-motion";
 
@@ -28,7 +29,7 @@ const Services = () => {
         <div className="flex">
           <div className="relative w-full max-w-lg">
             <div className="absolute top-0 -left-4 w-72 h-72 bg-red-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob " />
-            <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
+            <div className="absolute top-0 -right-4 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
             <div className="absolute top-20 right-24 w-72 h-72 bg-red-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
             <div className="m-8 relative space-y-4">
               <div className="p-5 bg-white rounded-lg flex items-center justify-between space-x-8">
@@ -36,9 +37,9 @@ const Services = () => {
                   <div className="h-7 flex items-center justify-center p-1 w-36 md:w-48 bg-gray-700 rounded">
                     <h1 className="font-semibold text-white">Withdraw Money</h1>
                   </div>
-                  <div className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
+                  <Link to="/withdraw" className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
                     Go
-                  </div>
+                  </Link>
                 </div>
               </div>
               <div className="p-5 bg-white rounded-lg flex items-center justify-between space-x-8">
@@ -46,29 +47,29 @@ const Services = () => {
                   <div className="h-7 flex items-center justify-center p-1 w-36 md:w-48 bg-gray-700 rounded">
                     <h1 className="font-semibold text-white">Deposit Money</h1>
                   </div>
-                  <div className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
+                  <Link to="/deposit" className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
                     Go
-                  </div>
+                  </Link>
                 </div>
               </div>
               <div className="p-5 bg-white rounded-lg flex items-center justify-between space-x-8">
                 <div className="flex-1 flex justify-between items-center">
                   <div className="h-7 flex items-center justify-center p-1 w-36 md:w-48 bg-gray-700 rounded">
-                    <h1 className="font-semibold text-white">See Balance</h1>
+                    <h1 className="font-semibold text-white">Transfer Funds</h1>
                   </div>
-                  <div className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
+                  <Link to="/transfer" className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
                     Go
-                  </div>
+                  </Link>
                 </div>
               </div>
               <div className="p-5 bg-white rounded-lg flex items-center justify-between space-x-8">
                 <div className="flex-1 flex justify-between items-center">
                   <div className="h-7 flex items-center justify-center p-1 w-36 md:w-48 bg-gray-700 rounded">
-                    <h1 className="font-semibold text-white">Send Money</h1>
+                    <h1 className="font-semibold text-white">View Profile</h1>
                   </div>
-                  <div className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
+                  <Link to="/profile" className="w-24 h-6 rounded-lg bg-rose-700 text-white font-semibold flex justify-center hover:bg-rose-900">
                     Go
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>

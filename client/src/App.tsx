@@ -5,23 +5,41 @@ import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Footer from "./components/Footer";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Withdraw from "./pages/Withdraw";
+import Deposit from "./pages/Deposit";
+import Transfer from "./pages/Transfer";
+import { AlertState } from "./context/AlertContext";
+import { ToastContainer } from "react-toastify";
 
 function App() {
-
   return (
     <>
-      <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/about" element={<About />} />
-        <Route path="*" element={<_404 />} />
-      </Routes>
-      <Footer />
-      </Router>
+      <AlertState>
+        <Router>
+          <Navbar />
+          <ToastContainer
+            autoClose={2000}
+            theme="colored"
+            toastStyle={{ backgroundColor: "#F87171", color: "#fff" }}
+          />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Signup />} />
+            <Route path="/withdraw" element={<Withdraw />} />
+            <Route path="/deposit" element={<Deposit />} />
+            <Route path="/transfer" element={<Transfer />} />
+            <Route path="*" element={<_404 />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </AlertState>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
