@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import logo from "../assets/logo.png";
 
 const Navbar = () => {
   return (
@@ -8,17 +9,18 @@ const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ delay: 0.2, type: "spring", stiffness: 50 }}
-        className="bg-white shadow-lg h-24 md:flex"
+        className="z-50 bg-white shadow-lg h-30 md:flex"
       >
         <a
           href=""
           className="border flex-shrink-0 flex items-center justify-center px-4 lg:px-6 xl:px-8"
         >
           <img
-            className=""
-            src="https://i.ibb.co/W6ZXdqN/2021-10-26-16h20-21.png"
+            className="w-10 my-4"
+            src={logo}
             alt=""
           />
+          <h2 className="font-bold ml-3">Carmine Bank</h2>
         </a>
         <nav className="header-links contents font-semibold text-base lg:text-lg">
           <ul className="flex items-center justify-center md:justify-start ml-4 xl:ml-8 mr-auto">

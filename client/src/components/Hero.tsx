@@ -8,7 +8,7 @@ const Hero = () => {
         initial={{ y: -180 }}
         animate={{ y: 0 }}
         transition={{ delay: 0.2, type: "spring", stiffness: 50 }}
-        className="relative bg-[url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)] bg-cover bg-center bg-no-repeat"
+        className="z-10 relative bg-[url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)] bg-cover bg-center bg-no-repeat"
       >
         <motion.div 
         initial={{ opacity: 0 }}
@@ -26,7 +26,7 @@ const Hero = () => {
             <h1
             className="font-extrabold text-5xl/relaxed">
             Discover Your 
-              <strong className="block font-extrabold text-rose-700 md:text-5xl/relaxed text-4xl">
+              <strong className="block font-extrabold text-rose-700 md:text-5xl/relaxed text-3xl">
               Financial Haven with Us
               </strong>
             </h1>

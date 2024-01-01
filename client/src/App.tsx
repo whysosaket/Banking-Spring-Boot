@@ -4,6 +4,7 @@ import _404 from "./pages/_404";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
+import Footer from "./components/Footer";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="*" element={<_404 />} />
       </Routes>
+      <Footer />
       </Router>
     </>
   )
