@@ -12,12 +12,14 @@ import Deposit from "./pages/Deposit";
 import Transfer from "./pages/Transfer";
 import { AlertState } from "./context/AlertContext";
 import { ToastContainer } from "react-toastify";
+import ScrollToTop from "./utils/ScrollToTop";
 
 function App() {
   return (
     <>
       <AlertState>
         <Router>
+          <ScrollToTop />
           <Navbar />
           <ToastContainer
             autoClose={2000}

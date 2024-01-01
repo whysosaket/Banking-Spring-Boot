@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Login = () => {
 
 //   const {login} = useContext(AuthContext);
-    const {updateAlert} = useContext(AlertContext);
+const {updateAlert} = useContext(AlertContext);
   const navigate = useNavigate();
 
   const usernameRef = useRef<HTMLInputElement>(null);
