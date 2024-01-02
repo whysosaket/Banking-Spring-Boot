@@ -132,7 +132,7 @@ const Transfer = () => {
                         aria-label="Amount"
                       />
                     </div>
-                    <div className="flex-grow">
+                    {/* <div className="flex-grow">
                       <input
                         name="card-nr"
                         className="text-sm text-gray-800 bg-white rounded-l leading-5 py-2 px-3 placeholder-gray-400 w-full border border-transparent focus:border-rose-300 focus:ring-0"
@@ -140,8 +140,8 @@ const Transfer = () => {
                         placeholder="Pin"
                         aria-label="Pin"
                       />
-                    </div>
-                    <div className="flex-grow">
+                    </div> */}
+                    <div className="flex-grow flex">
                       <input
                         name="card-nr"
                         className="text-sm text-gray-800 bg-white rounded-l leading-5 py-2 px-3 placeholder-gray-400 w-full border border-transparent focus:border-rose-300 focus:ring-0"
@@ -149,6 +149,10 @@ const Transfer = () => {
                         placeholder="Iterations"
                         aria-label="Card Number"
                       />
+                        <div className="ml-2 hover:border-red-400 border-2">
+                        <input type="checkbox" className="w-4 " />
+                        <label htmlFor="checkbox" className="text-sm font-semibold my-0 mx-2">Unsafe</label>
+                      </div>
                     </div>
                     <button
                       onClick={handleClick}

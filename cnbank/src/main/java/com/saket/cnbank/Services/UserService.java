@@ -178,6 +178,9 @@ public class UserService {
 
     public boolean loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return false;
+        }
         if (user.getPassword().equals(password)) {
             return true;
         } else {

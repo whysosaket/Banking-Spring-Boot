@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import SignupImage from "../assets/bg.svg";
 import {motion} from "framer-motion";
-// import AuthContext from "../context/auth/AuthContext"
+import GlobalContext from "../context/GlobalContext"
 import { useContext, useRef } from "react";
 import AlertContext from "../context/AlertContext";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 
-//   const {login} = useContext(AuthContext);
+  const {login} = useContext(GlobalContext);
 const {updateAlert} = useContext(AlertContext);
   const navigate = useNavigate();
 
@@ -24,10 +24,10 @@ const {updateAlert} = useContext(AlertContext);
       updateAlert("Please enter both username and password!");
       return;
     }
-    // const res = await login(username, password);
-    // if(res){
-    //   navigate("/");
-    // }
+    const res = await login(username, password);
+    if(res){
+      navigate("/");
+    }
   }
 
   return (

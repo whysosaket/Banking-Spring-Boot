@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
+import { useContext } from "react";
+import GlobalContext from "../context/GlobalContext";
 
 const Navbar = () => {
+  const {isAuthenticated, handleLogout} = useContext(GlobalContext);
+
   return (
     <>
       <motion.div
@@ -42,9 +46,13 @@ const Navbar = () => {
         </nav>
 
         <div className="border items-center px-4 lg:px-6 xl:px-8 hidden md:flex">
-          <Link to="/register" className="bg-rose-600  hover:bg-rose-700 text-white font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">
+         {isAuthenticated?
+         <button onClick={handleLogout} className="bg-rose-600  hover:bg-rose-700 text-white font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">
+            Logout
+          </button>
+         : <Link to="/register" className="bg-rose-600  hover:bg-rose-700 text-white font-bold px-4 xl:px-6 py-2 xl:py-3 rounded">
             Register
-          </Link>
+          </Link>}
         </div>
       </motion.div>
     </>

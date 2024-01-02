@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import SignupImage from "../assets/bg.svg";
 import { motion } from "framer-motion";
 import { useContext, useRef } from "react";
-// import AuthContext from "../context/auth/AuthContext";
 import AlertContext from "../context/AlertContext";
 import { useNavigate } from "react-router-dom";
+import GlobalContext from "../context/GlobalContext";
 
 const Signup = () => {
   // Importing alert context
-//   const {signup,sendOtp} = useContext(AuthContext);
+  const {register} = useContext(GlobalContext);
   const {updateAlert} = useContext(AlertContext);
 
   const navigate = useNavigate();
@@ -18,22 +18,20 @@ const Signup = () => {
   const passwordref = useRef<HTMLInputElement>(null);
   const nameref = useRef<HTMLInputElement>(null);
   const emailref = useRef<HTMLInputElement>(null);
-  const otpref = useRef<HTMLInputElement>(null);
 
   const handleClick = async () => {
     const name:string = nameref.current?.value || "";
     const username:string = usernameref.current?.value || "";
     const password:string = passwordref.current?.value || "";
-    const otp:string = otpref.current?.value || "";
     const email:string = emailref.current?.value || "";
-    if(email==""||username==""||password==""||otp==""||name==""){
+    if(email==""||username==""||password==""||name==""){
       updateAlert("Please fill all the fields to continue.","danger");
       return;
     }
-    // const response = await signup(name, username, password, otp, email);
-    // if(response){
-    //     navigate("/login")
-    // }
+    const response = await register(name, username,  email, password);
+    if(response){
+        navigate("/login")
+    }
   };
 
   return (

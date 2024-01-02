@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import GlobalContext from "../context/GlobalContext";
 
 const Hero = () => {
+  const {isAuthenticated, handleLogout} = useContext(GlobalContext);
   return (
     <>
       <motion.div
@@ -34,12 +37,18 @@ const Hero = () => {
             Unlock a World of Financial Stability and Personalized Solutions for Your Everlasting Home.
             </p>
             <div className="mt-8 flex flex-wrap gap-4 text-center">
-              <Link
-                to="/login"
-                className="block w-full rounded bg-rose-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto"
-              >
-                Login
-              </Link>
+              {
+                isAuthenticated?
+                <button onClick={handleLogout} className="block w-full rounded bg-rose-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto">
+                Logout
+              </button>
+              : <Link
+              to="/login"
+              className="block w-full rounded bg-rose-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto"
+            >
+              Login
+            </Link>
+              }
               <a
                 href="#"
                 className="block w-full rounded bg-white px-12 py-3 text-sm font-medium text-rose-600 shadow hover:text-rose-700 focus:outline-none focus:ring active:text-rose-500 sm:w-auto"
