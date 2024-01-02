@@ -10,5 +10,6 @@ import com.saket.cnbank.Models.User;
 public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     User findByUsername(String username);
+    User findByEmail(String email);
     
 }
