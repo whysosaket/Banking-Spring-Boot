@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext, useRef } from "react";
 import Logo from "../assets/logo.png";
 import Tick from "../assets/tick.svg";
 import { motion } from "framer-motion";
+import GlobalContext from "../context/GlobalContext";
 
 const year = new Date().getFullYear();
 const monthNames = [
@@ -24,10 +25,46 @@ const isPhone = window.innerWidth < 768;
 
 const Withdraw = () => {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [balance, setBalance] = useState(0);
 
-  const handleClick = () => {
-    setIsSuccess(true);
+  const {alert,showBalance, isAuthenticated, withdrawSafe, withdrawUnsafe} = useContext(GlobalContext);
+
+  const amountRef = useRef<HTMLInputElement>(null);
+  const iterationsRef = useRef<HTMLInputElement>(null);
+  const isUnsafeRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = async () => {
+    if(!isAuthenticated){
+      alert("Please login to continue!", "danger");
+      return;
+    }
+    const amount = amountRef.current?.value || "";
+    const iterations = iterationsRef.current?.value || "";
+    const isUnsafe = isUnsafeRef.current?.checked || false;
+    if(amount==""||iterations==""){
+      alert("Please fill all the fields to continue!", "danger");
+      return;
+    }
+    if(isUnsafe){
+      const am = await withdrawUnsafe(amount, iterations);
+      const bal = await showBalance();
+      setAmount(am);
+      setBalance(bal);
+      setIsSuccess(true);
+    }else{
+      const am = await withdrawSafe(amount, iterations);
+      const bal = await showBalance();
+      setAmount(am);
+      setBalance(bal);
+      setIsSuccess(true);
+    }
   };
+
+  const reset = () => {
+    setIsSuccess(false);
+    setAmount(0);
+  }
 
   const cardVarient = {
     initial: {
@@ -121,6 +158,7 @@ const Withdraw = () => {
                         type="text"
                         placeholder="Amount"
                         aria-label="Amount"
+                        ref={amountRef}
                       />
                     </div>
                     {/* <div className="flex-grow">
@@ -139,10 +177,12 @@ const Withdraw = () => {
                         type="text"
                         placeholder="Iterations"
                         aria-label="Card Number"
+                        defaultValue={10}
+                        ref={iterationsRef}
                       />
 
                       <div className="ml-2 hover:border-red-400 border-2">
-                        <input type="checkbox" className="w-4 " />
+                        <input type="checkbox" className="w-4 " ref={isUnsafeRef} />
                         <label htmlFor="checkbox" className="text-sm font-semibold my-0 mx-2">Unsafe</label>
                       </div>
                       
@@ -173,10 +213,12 @@ const Withdraw = () => {
                     Success!
                   </h1>
                   <div className="text-sm font-medium text-gray-500">
-                    Your money has been withdrawn successfully.
+                    <span className="font-sm font-bold text-red-500">₹{amount}</span> has been withdrawn.
                   </div>
                   <div className="">
-
+                  <button onClick={reset} className="reset-button text-sm px-8 py-2 rounded-md my-2 text-white font-semibold bg-rose-500 hover:bg-rose-700">
+                    Withdraw again
+                  </button>
                   </div>
                 </motion.div>
               )}
@@ -194,7 +236,7 @@ const Withdraw = () => {
                     Available Balance
                 </h1>
                 <h1 className="font-semibold text-4xl text-green-700">
-                    ₹ 7372
+                    ₹ {balance}
                 </h1>
               </div>
             </motion.div>

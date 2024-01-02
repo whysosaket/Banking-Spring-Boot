@@ -113,7 +113,6 @@ public class UserService {
                 saveTransaction(username, username , amount, "Withdraw");
             }
         });
-
         return totalAmount.get();
     }
 

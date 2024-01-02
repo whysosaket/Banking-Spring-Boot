@@ -96,6 +96,9 @@ public class UserController {
     @PostMapping("/withdrawunsafe")
     public ResponseEntity<Integer> withdrawNotThreadSafe(@RequestHeader String username, @RequestBody DepositCreationRequest request) {
         int newBalance = userService.withdrawNotThreadSafe(username, request.getAmount(), request.getIterations());
+        if (newBalance <= 0) {
+            return new ResponseEntity<>(newBalance, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(newBalance, HttpStatus.OK);
     }
 
@@ -103,6 +106,9 @@ public class UserController {
     @PostMapping("/withdrawsafe")
     public ResponseEntity<Integer> withdrawThreadSafe(@RequestHeader String username, @RequestBody DepositCreationRequest request) {
         int newBalance = userService.withdrawThreadSafe(username, request.getAmount(), request.getIterations());
+         if (newBalance <= 0) {
+            return new ResponseEntity<>(newBalance, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(newBalance, HttpStatus.OK);
     }
 
