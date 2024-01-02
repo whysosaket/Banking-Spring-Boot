@@ -1,6 +1,7 @@
 package com.saket.cnbank.Controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saket.cnbank.Models.Transaction;
 import com.saket.cnbank.Requests.DepositCreationRequest;
 import com.saket.cnbank.Requests.TransferCreatingRequest;
 import com.saket.cnbank.Requests.UserCreationRequest;
@@ -116,7 +120,29 @@ public class UserController {
         return new ResponseEntity<>(userService.checkBalance(username), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
+    @GetMapping("/gettransactions")
+    public ResponseEntity<List<String>> getTransactions(@RequestHeader String username) {
+        List<Transaction> transactions = userService.getTransactions(username);
 
+        List<String> jsonTransactions = transactions.stream()
+                .map(this::convertTransactionToJson)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(jsonTransactions, HttpStatus.OK);
+    }
+
+
+
+      private String convertTransactionToJson(Transaction transaction) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(transaction);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "{}";
+        }
+    }
 
     
 }

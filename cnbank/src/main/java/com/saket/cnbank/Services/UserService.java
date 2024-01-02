@@ -3,7 +3,9 @@ package com.saket.cnbank.Services;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.saket.cnbank.Repositories.TransactionRepository;
 import com.saket.cnbank.Repositories.UserRepository;
+import com.saket.cnbank.Models.Transaction;
 import com.saket.cnbank.Models.User;
 
 import java.util.ArrayList;
@@ -13,10 +15,28 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+// import com.saket.cnbank.Services.TransactionService;
+
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    void saveTransaction(String from, String to, int amount, String type) {
+        String date = java.time.LocalDate.now().toString();
+        String time = java.time.LocalTime.now().toString();
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setType(type);
+        transaction.setFrom(from);
+        transaction.setTo(to);
+        transaction.setDate(date);
+        transaction.setTime(time);
+        transactionRepository.save(transaction);
+    }
 
     private final Object lock = new Object();
 
@@ -59,6 +79,7 @@ public class UserService {
         executeInThreadPool(iterations, () -> {
             user.setBalance(user.getBalance() + amount);
             userRepository.save(user);
+            saveTransaction(username, username , amount, "Deposit");
         });
         return user.getBalance();
     }
@@ -70,13 +91,14 @@ public class UserService {
             synchronized (lock) {
                 user.setBalance(user.getBalance() + amount);
                 userRepository.save(user);
+                saveTransaction(username, username , amount, "Deposit");
             }
         });
         return user.getBalance();
     }
 
     // Non-Thread-Safe Withdrawal Method
-      public int withdrawNotThreadSafe(String username, int amount, int iterations) {
+    public int withdrawNotThreadSafe(String username, int amount, int iterations) {
         User user = userRepository.findByUsername(username);
         AtomicInteger totalAmount = new AtomicInteger(0);
 
@@ -88,6 +110,7 @@ public class UserService {
                 totalAmount.addAndGet(amount);
                 user.setBalance(balance - amount);
                 userRepository.save(user);
+                saveTransaction(username, username , amount, "Withdraw");
             }
         });
 
@@ -108,6 +131,7 @@ public class UserService {
                     totalAmount.addAndGet(amount);
                     user.setBalance(balance - amount);
                     userRepository.save(user);
+                    saveTransaction(username, username , amount, "Withdraw");
                 }
             }
         });
@@ -130,6 +154,7 @@ public class UserService {
                     toUser.setBalance(toUser.getBalance() + amount);
                     userRepository.save(user);
                     userRepository.save(toUser);
+                    saveTransaction(username, toUsername , amount, "Withdraw");
                 }
             }
         });
@@ -149,10 +174,10 @@ public class UserService {
                 toUser.setBalance(toUser.getBalance() + amount);
                 userRepository.save(user);
                 userRepository.save(toUser);
+                saveTransaction(username, toUsername , amount, "Withdraw");
             }
         });
     }
-
 
     public User getUser(String username) {
         return userRepository.findByUsername(username);
@@ -192,6 +217,11 @@ public class UserService {
         User user = userRepository.findByUsername(username);
         user.setBalance(0);
         userRepository.save(user);
+        // Reset All transactions by user
+        List<Transaction> transactions = transactionRepository.findByFrom(username);
+        for (Transaction transaction : transactions) {
+            transactionRepository.delete(transaction);
+        }
     }
 
     public void setBalance(String username, int amount) {
@@ -208,5 +238,9 @@ public class UserService {
         userInfo.add(user.getUsername());
         userInfo.add(String.valueOf(user.getBalance()));
         return userInfo;
+    }
+
+    public List<Transaction> getTransactions(String username) {
+        return transactionRepository.findByFrom(username);
     }
 }
