@@ -1,16 +1,21 @@
 package com.saket.cnbank.Requests;
 
-public class DepositCreationRequest {
+public class TransferCreatingRequest {
+    private String sendto;
     private int amount;
     private int iterations;
 
-    public DepositCreationRequest() {
+    public TransferCreatingRequest() {
     }
 
-    public DepositCreationRequest(int amount, int iterations) {
+    public TransferCreatingRequest(String sendto, int amount, int iterations) {
+        this.sendto = sendto;
         this.amount = amount;
         this.iterations = iterations;
-        System.out.println("DepositCreationRequest: " + this.amount + " " + this.iterations);
+    }
+
+    public String getSendto() {
+        return this.sendto;
     }
 
     public int getAmount() {

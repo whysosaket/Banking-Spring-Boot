@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.saket.cnbank.Requests.DepositCreationRequest;
+import com.saket.cnbank.Requests.TransferCreatingRequest;
 import com.saket.cnbank.Requests.UserCreationRequest;
 import com.saket.cnbank.Services.UserService;
 
@@ -90,6 +91,17 @@ public class UserController {
         return new ResponseEntity<>(newBalance, HttpStatus.OK);
     }
 
+    @PostMapping("/transferunsafe")
+    public ResponseEntity<Integer> transferNotThreadSafe(@RequestHeader String username, @RequestBody TransferCreatingRequest request) {
+        userService.transferNotThreadSafe(username, request.getAmount(), request.getIterations(), request.getSendto());
+        return new ResponseEntity<>(userService.checkBalance(username), HttpStatus.OK);
+    }
+
+    @PostMapping("/transfersafe")
+    public ResponseEntity<Integer> transferThreadSafe(@RequestHeader String username, @RequestBody TransferCreatingRequest request) {
+        userService.transferThreadSafe(username, request.getAmount(), request.getIterations(), request.getSendto());
+        return new ResponseEntity<>(userService.checkBalance(username), HttpStatus.OK);
+    }
 
 
 
