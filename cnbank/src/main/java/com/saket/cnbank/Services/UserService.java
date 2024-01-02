@@ -79,7 +79,7 @@ public class UserService {
         executeInThreadPool(iterations, () -> {
             user.setBalance(user.getBalance() + amount);
             userRepository.save(user);
-            saveTransaction(username, username , amount, "Deposit");
+            saveTransaction(username, username, amount, "Deposit");
         });
         return user.getBalance();
     }
@@ -91,7 +91,7 @@ public class UserService {
             synchronized (lock) {
                 user.setBalance(user.getBalance() + amount);
                 userRepository.save(user);
-                saveTransaction(username, username , amount, "Deposit");
+                saveTransaction(username, username, amount, "Deposit");
             }
         });
         return user.getBalance();
@@ -110,7 +110,7 @@ public class UserService {
                 totalAmount.addAndGet(amount);
                 user.setBalance(balance - amount);
                 userRepository.save(user);
-                saveTransaction(username, username , amount, "Withdraw");
+                saveTransaction(username, username, amount, "Withdraw");
             }
         });
         return totalAmount.get();
@@ -130,7 +130,7 @@ public class UserService {
                     totalAmount.addAndGet(amount);
                     user.setBalance(balance - amount);
                     userRepository.save(user);
-                    saveTransaction(username, username , amount, "Withdraw");
+                    saveTransaction(username, username, amount, "Withdraw");
                 }
             }
         });
@@ -139,9 +139,14 @@ public class UserService {
     }
 
     // Thread-Safe Transfer Method
-    public void transferThreadSafe(String username, int amount, int iterations, String toUsername) {
+    public int transferThreadSafe(String username, int amount, int iterations, String toUsername) {
         User user = userRepository.findByUsername(username);
         User toUser = userRepository.findByUsername(toUsername);
+        AtomicInteger totalAmount = new AtomicInteger(0);
+
+        if (toUser == null || user == null) {
+            return 0;
+        }
 
         executeInThreadPoolSync(iterations, () -> {
             synchronized (lock) {
@@ -149,33 +154,42 @@ public class UserService {
                 if (balance < amount) {
                     System.out.println("Insufficient Balance!");
                 } else {
+                    totalAmount.addAndGet(amount);
                     user.setBalance(balance - amount);
                     toUser.setBalance(toUser.getBalance() + amount);
                     userRepository.save(user);
                     userRepository.save(toUser);
-                    saveTransaction(username, toUsername , amount, "Withdraw");
+                    saveTransaction(username, toUsername, amount, "Withdraw");
                 }
             }
         });
+        return totalAmount.get();
     }
 
     // Non-Thread-Safe Transfer Method
-    public void transferNotThreadSafe(String username, int amount, int iterations, String toUsername) {
+    public int transferNotThreadSafe(String username, int amount, int iterations, String toUsername) {
         User user = userRepository.findByUsername(username);
         User toUser = userRepository.findByUsername(toUsername);
+        AtomicInteger totalAmount = new AtomicInteger(0);
+
+        if (toUser == null || user == null) {
+            return 0;
+        }
 
         executeInThreadPool(iterations, () -> {
             int balance = user.getBalance();
             if (balance < amount) {
                 System.out.println("Insufficient Balance!");
             } else {
+                totalAmount.addAndGet(amount);
                 user.setBalance(balance - amount);
                 toUser.setBalance(toUser.getBalance() + amount);
                 userRepository.save(user);
                 userRepository.save(toUser);
-                saveTransaction(username, toUsername , amount, "Withdraw");
+                saveTransaction(username, toUsername, amount, "Withdraw");
             }
         });
+        return totalAmount.get();
     }
 
     public User getUser(String username) {

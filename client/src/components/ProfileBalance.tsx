@@ -1,5 +1,25 @@
 import { motion } from "framer-motion";
+import { useContext, useEffect, useState } from "react";
+import GlobalContext  from "../context/GlobalContext";
+
 const ProfileBalance = () => {
+
+  const {isAuthenticated, showBalance} = useContext(GlobalContext);
+  const [balance, setBalance] = useState("Loading...");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      bankBalance();
+    };
+  }, []);
+
+  const bankBalance = async () => {
+    const bal = await showBalance();
+    setBalance("₹"+bal);
+  }
+
+
+
   return (
     <>
       <motion.div
@@ -20,7 +40,7 @@ const ProfileBalance = () => {
                 <h5 className="font-bold uppercase text-gray-400">
                   Total Balance
                 </h5>
-                <h3 className="font-bold text-3xl text-gray-600">₹ 7310</h3>
+                <h3 className="font-bold text-3xl text-gray-600">{balance}</h3>
               </div>
             </div>
           </div>

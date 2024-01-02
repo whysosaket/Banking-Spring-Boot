@@ -126,7 +126,6 @@ const GlobalState = (props: any) => {
     );
     const data = await res.text();
     if (res.ok) {
-        console.log(data);
       return data;
     } else {
       alert("Transaction Failed", "danger");
@@ -173,6 +172,87 @@ const GlobalState = (props: any) => {
     }
   }
 
+  const getTransactions = async () => {
+    const res = await fetch(`${import.meta.env.VITE_HOST}/user/gettransactions`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        username: localStorage.getItem("token") || "",
+      },
+    });
+    let data: string = await res.text();
+    const jsonArray = JSON.parse(data);
+    const jsonOutput = jsonArray.map((item: string) => JSON.parse(item));
+    if (res.ok) {
+      return jsonOutput;
+    } else {
+      alert("Transaction Failed", "danger");
+      return {amount: NaN, type: NaN, from: NaN, to: NaN, date: "Date", time: "Time"};
+    }
+  }
+
+  const getInfo = async () => {
+    const res = await fetch(`${import.meta.env.VITE_HOST}/user/getinfo`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        username: localStorage.getItem("token") || "",
+      },
+    });
+    const data = await res.text();
+    if (res.ok) {
+      console.log(data);
+      return data;
+    } else {
+      alert("Transaction Failed", "danger");
+      return NaN;
+    }
+  }
+
+  const transferUnsafe = async (amount: number, iterations: number, sendto: string) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_HOST}/user/transferunsafe`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          username: localStorage.getItem("token") || "",
+        },
+        body: JSON.stringify({ amount, iterations, sendto }),
+      }
+    );
+    const data = await res.text();
+    if (res.ok) {
+      console.log(data);
+      return data;
+    } else {
+      alert("Transaction Failed", "danger");
+      return NaN;
+    }
+  }
+
+  const transferSafe = async (amount: number, iterations: number, sendto: string) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_HOST}/user/transfersafe`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          username: localStorage.getItem("token") || "",
+        },
+        body: JSON.stringify({ amount, iterations, sendto }),
+      }
+    );
+    const data = await res.text();
+    if (res.ok) {
+      console.log(data);
+      return data;
+    } else {
+      alert("Transaction Failed", "danger");
+      return NaN;
+    }
+  }
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -191,7 +271,11 @@ const GlobalState = (props: any) => {
         depositUnsafe,
         withdrawSafe,
         withdrawUnsafe,
-        showBalance
+        showBalance,
+        getTransactions,
+        getInfo,
+        transferSafe,
+        transferUnsafe
       }}
     >
       {props.children}

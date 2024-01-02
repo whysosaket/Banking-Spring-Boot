@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import SignupImage from "../assets/bg.svg";
 import { motion } from "framer-motion";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import AlertContext from "../context/AlertContext";
 import { useNavigate } from "react-router-dom";
 import GlobalContext from "../context/GlobalContext";
 
 const Signup = () => {
   // Importing alert context
-  const {register} = useContext(GlobalContext);
+  const {register, isAuthenticated} = useContext(GlobalContext);
   const {updateAlert} = useContext(AlertContext);
 
   const navigate = useNavigate();
@@ -33,6 +33,12 @@ const Signup = () => {
         navigate("/login")
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
     <div>

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Logo from "../assets/logo.png";
 import ProfileBalance from "../components/ProfileBalance";
 import { motion } from "framer-motion";
 import Transactions from "../components/Transactions";
+import GlobalContext from "../context/GlobalContext";
+import { useNavigate } from "react-router-dom";
 
 
 const Profile = () => {
@@ -10,6 +12,26 @@ const Profile = () => {
     const [isActivated, setIsActivated] = useState(false);
     const [isBalance, setIsBalance] = useState(false);  
     const [isTransaction, setIsTransaction] = useState(false);
+    const navigate = useNavigate();
+    const [info, setInfo] = useState({name: "Loading...", email: "Loading...", username: "Loading...", balance: "Loading..."});
+
+    const {isAuthenticated, getInfo} = useContext(GlobalContext);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+          fetchInfo();
+        }else{
+            navigate("/login");
+        }
+      }, []);
+
+      const fetchInfo = async () => {
+        const data = await getInfo();
+        // [Saket Aryan, saket@gmail.com, saket, 30000]
+        // convert the above string into an object
+        const [name, email, username, balance] = data.split(",");
+        setInfo({name, email, username, balance});
+      }
 
     const handleTransaction = () => {
         setIsActivated(true);
@@ -46,15 +68,15 @@ const Profile = () => {
               </div>
               <div className="text-center">
                 <h3 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700">
-                  Jenna Stones
+                  {info.name.split("[")[1]}
                 </h3>
                 <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400" />
-                    jennastones@gmail.com
+                    {info.email}
                 </div>
                 <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400" />
-                    whysosaket
+                    {info.username}
                 </div>
               </div>
               <div className="mt-10 py-10 border-t border-blueGray-200 text-center">

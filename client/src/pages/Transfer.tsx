@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext, useRef } from "react";
 import Logo from "../assets/logo.png";
 import Tick from "../assets/tick.svg";
 import { motion } from "framer-motion";
+import GlobalContext from "../context/GlobalContext";
 
 const year = new Date().getFullYear();
 const monthNames = [
@@ -24,10 +25,43 @@ const isPhone = window.innerWidth < 768;
 
 const Transfer = () => {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [amount, setAmount] = useState(0);
 
-  const handleClick = () => {
-    setIsSuccess(true);
+  const {alert,isAuthenticated, transferSafe, transferUnsafe} = useContext(GlobalContext);
+
+  const amountRef = useRef<HTMLInputElement>(null);
+  const iterationsRef = useRef<HTMLInputElement>(null);
+  const isUnsafeRef = useRef<HTMLInputElement>(null);
+  const toUserRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = async () => {
+    const amount = amountRef.current?.value || "";
+    const iterations = iterationsRef.current?.value || "";
+    const isUnsafe = isUnsafeRef.current?.checked || false;
+    const toUser = toUserRef.current?.value || "";
+    if(amount==""||iterations==""||toUser==""){
+      alert("Please fill all the fields to continue!", "danger");
+      return;
+    }
+    if(!isAuthenticated){
+      alert("Please login to continue!", "danger");
+      return;
+    }
+    if(isUnsafe){
+      let data = await transferUnsafe(amount, iterations, toUser);
+      setAmount(data);
+      setIsSuccess(true);
+    }
+    else{
+      let data = await transferSafe(amount, iterations, toUser);
+      setAmount(data);
+      setIsSuccess(true);
+    }
   };
+
+  const reset = () => {
+    setIsSuccess(false);
+  }
 
   const cardVarient = {
     initial: {
@@ -121,6 +155,7 @@ const Transfer = () => {
                         type="text"
                         placeholder="Transfer to"
                         aria-label="Amount"
+                        ref={toUserRef}
                       />
                     </div>
                     <div className="flex-grow">
@@ -130,6 +165,7 @@ const Transfer = () => {
                         type="text"
                         placeholder="Amount"
                         aria-label="Amount"
+                        ref={amountRef}
                       />
                     </div>
                     {/* <div className="flex-grow">
@@ -148,9 +184,11 @@ const Transfer = () => {
                         type="text"
                         placeholder="Iterations"
                         aria-label="Card Number"
+                        defaultValue={10}
+                        ref={iterationsRef}
                       />
                         <div className="ml-2 hover:border-red-400 border-2">
-                        <input type="checkbox" className="w-4 " />
+                        <input type="checkbox" className="w-4 " ref={isUnsafeRef} />
                         <label htmlFor="checkbox" className="text-sm font-semibold my-0 mx-2">Unsafe</label>
                       </div>
                     </div>
@@ -182,6 +220,11 @@ const Transfer = () => {
                   <div className="text-sm font-medium text-gray-500">
                     Your money has been transferred successfully.
                   </div>
+                  <div className="">
+                  <button onClick={reset}  className="reset-button text-sm px-8 py-2 rounded-md my-2 text-white font-semibold bg-rose-500 hover:bg-rose-700">
+                    Transfer again
+                  </button>
+                  </div>
                 </motion.div>
               )}
             </div>
@@ -198,7 +241,7 @@ const Transfer = () => {
                     Available Balance
                 </h1>
                 <h1 className="font-semibold text-4xl text-green-700">
-                    ₹ 7372
+                    ₹{amount}
                 </h1>
               </div>
             </motion.div>

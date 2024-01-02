@@ -115,14 +115,20 @@ public class UserController {
     @CrossOrigin(origins = "*")
     @PostMapping("/transferunsafe")
     public ResponseEntity<Integer> transferNotThreadSafe(@RequestHeader String username, @RequestBody TransferCreatingRequest request) {
-        userService.transferNotThreadSafe(username, request.getAmount(), request.getIterations(), request.getSendto());
+        int r = userService.transferNotThreadSafe(username, request.getAmount(), request.getIterations(), request.getSendto());
+        if(r == 0) {
+            return new ResponseEntity<>(r, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(userService.checkBalance(username), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*")
     @PostMapping("/transfersafe")
     public ResponseEntity<Integer> transferThreadSafe(@RequestHeader String username, @RequestBody TransferCreatingRequest request) {
-        userService.transferThreadSafe(username, request.getAmount(), request.getIterations(), request.getSendto());
+        int r = userService.transferThreadSafe(username, request.getAmount(), request.getIterations(), request.getSendto());
+        if(r == 0) {
+            return new ResponseEntity<>(r, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(userService.checkBalance(username), HttpStatus.OK);
     }
 
