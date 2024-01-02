@@ -2,7 +2,6 @@ package com.saket.cnbank.Services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 
 import com.saket.cnbank.Repositories.UserRepository;
 import com.saket.cnbank.Models.User;
