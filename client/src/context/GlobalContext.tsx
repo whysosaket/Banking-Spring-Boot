@@ -199,9 +199,8 @@ const GlobalState = (props: any) => {
         username: localStorage.getItem("token") || "",
       },
     });
-    const data = await res.text();
+    const data = await res.json();
     if (res.ok) {
-      console.log(data);
       return data;
     } else {
       alert("Transaction Failed", "danger");

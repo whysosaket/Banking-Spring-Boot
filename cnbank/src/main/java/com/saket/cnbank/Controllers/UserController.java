@@ -1,6 +1,8 @@
 package com.saket.cnbank.Controllers;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,18 @@ public class UserController {
     @GetMapping("/getinfo")
     public ResponseEntity<String> getUserInfo(@RequestHeader String username) {
         List<String> response = userService.getUserInfo(username);
-        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        Map<String, String> map = new HashMap<>();
+        map.put("name", response.get(0));
+        map.put("email", response.get(1));
+        map.put("username", response.get(2));
+        map.put("balance", response.get(3));
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return new ResponseEntity<>(objectMapper.writeValueAsString(map), HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("{}", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @CrossOrigin(origins = "*")

@@ -27,10 +27,7 @@ const Profile = () => {
 
       const fetchInfo = async () => {
         const data = await getInfo();
-        // [Saket Aryan, saket@gmail.com, saket, 30000]
-        // convert the above string into an object
-        const [name, email, username, balance] = data.split(",");
-        setInfo({name, email, username, balance});
+        setInfo({name: data.name, email: data.email, username: data.username, balance: data.balance});
       }
 
     const handleTransaction = () => {
