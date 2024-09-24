@@ -30,6 +30,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/")
     public String index() {
         return "<h1>Welcome to the User Controller!</h1>";
