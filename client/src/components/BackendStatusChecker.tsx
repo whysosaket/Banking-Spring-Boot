@@ -25,8 +25,7 @@ const BackendStatusChecker = (props: { url: string }) => {
           clearInterval(intervalId);
         }
       } catch (err) {
-        setIsBackendUp(true);
-        disablePopup();
+        setIsBackendUp(false);
       }
     };
 
