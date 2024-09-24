@@ -16,10 +16,12 @@ import ScrollToTop from "./utils/ScrollToTop";
 import { GlobalState } from "./context/GlobalContext";
 import BackendStatusChecker from "./components/BackendStatusChecker";
 
+
+
 function App() {
   return (
     <>
-    <BackendStatusChecker url="http://localhost:9000/user/" />
+    <BackendStatusChecker url="import.meta.env.VITE_HOST/user/" />
     <GlobalState>
       <AlertState>
         <Router>
