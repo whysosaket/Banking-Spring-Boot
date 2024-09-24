@@ -21,7 +21,7 @@ import BackendStatusChecker from "./components/BackendStatusChecker";
 function App() {
   return (
     <>
-    <BackendStatusChecker url="import.meta.env.VITE_HOST/user/" />
+    <BackendStatusChecker url={`${import.meta.env.VITE_HOST}/user/`} />
     <GlobalState>
       <AlertState>
         <Router>
